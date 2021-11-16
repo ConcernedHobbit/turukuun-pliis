@@ -10,3 +10,7 @@
 
 [gitlog.txt](https://github.com/ConcernedHobbit/ot-harjoitustyo/blob/main/laskarit/viikko1/gitlog.txt)
 
+### Viikko 2
+
+[coverage.png](https://raw.githubusercontent.com/ConcernedHobbit/turukuun-pliis/main/laskarit/viikko2/coverage.png)
+
