@@ -15,3 +15,11 @@ def coverage(ctx):
 @task(coverage)
 def coverage_report(ctx):
     ctx.run("coverage html")
+
+@task
+def lint(ctx):
+    ctx.run("pylint src")
+
+@task
+def pep8(ctx):
+    ctx.run("autopep8 --in-place --recursive src")
