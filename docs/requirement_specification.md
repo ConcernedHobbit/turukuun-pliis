@@ -25,12 +25,12 @@ We assume that the user is familiar with basic knowledge of how to operate a gen
 ## Specific requirements
 *TWWTC = Those Who Wish To Cross, APWTC = A Person Wishing To Cross*
 ### Gameplay
-- [ ] There exists APWTC
-    - [ ] APWTC has a name
-    - [ ] APWTC has an age
-    - [ ] APWTC has a height
+- [x] There exists APWTC *person.Person*
+    - [x] APWTC has a name
+    - [x] APWTC has an age
+    - [x] APWTC has a height
     - [ ] APWTC has an origin city
-    - [ ] APWTC has a SSID
+    - [x] APWTC has a SSID
 
 - [ ] There exists requirements that TWWTC must meet
     - [ ] Visa requirement, visa document details must match (name, age, SSID, etc.)
@@ -43,7 +43,10 @@ We assume that the user is familiar with basic knowledge of how to operate a gen
 - [ ] The game state should be able to be loaded from a saved state
 
 ### Graphical requirements
-- [ ] The game should present the user with a windowed splash screen upon startup
+- [x] The game has a graphical interface (game window, screen)
+- [x] The game displays information regarding TWWTC on the game window
+- [x] APWTC has an image representation
+- [ ] The game presents the user with a windowed splash screen upon startup
     - [ ] The start-up screen should have a "New Game" option that starts a new game
     - [ ] The start-up screen should have a "Load Game" option that loads an existing game
     - [ ] The start-up screen should have an "Options" option that displays the options menu
