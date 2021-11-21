@@ -129,3 +129,12 @@ class TestSSID(unittest.TestCase):
         ssid = SSID(date(2000, 12, 20))
         self.assertGreaterEqual(ssid.individual_number, 2)
         self.assertLessEqual(ssid.individual_number, 899)
+
+    def test_birthyear_matches(self):
+        ssid = SSID(date(2000, 12, 20))
+        self.assertTrue(ssid.matches_birthyear(2000))
+
+    def test_wrong_birthyear_does_not_match(self):
+        ssid = SSID(date(2000, 12, 20))
+        self.assertFalse(ssid.matches_birthyear(1999))
+        self.assertFalse(ssid.matches_birthyear(2001))

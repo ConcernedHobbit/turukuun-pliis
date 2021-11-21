@@ -1,6 +1,8 @@
 from datetime import date
 from random import randrange
 from typing import Optional
+import pygame
+from pygame.constants import SRCALPHA
 
 
 class SSID:
@@ -10,8 +12,6 @@ class SSID:
         else:
             raise ValueError(
                 'SSID is not defined for years before 1800 or after 2099')
-
-        print(individual_number)
 
         if individual_number is None:
             self.individual_number = randrange(2, 900)
@@ -56,12 +56,92 @@ class SSID:
         # will have to be updated once dvv specifices symbol for 21xx
         return 'A'
 
+    def matches_birthyear(self, year: int) -> bool:
+        return self.birthday.year == year
+
     def __repr__(self) -> str:
         return f'{self._date}{self._seperator}{self._padded_individual_number}{self._checkdigit}'
 
 
-class Person:
-    def __init__(self, name: str, age: int, height: int) -> None:
-        self.name = name
-        self.age = age
-        self.height = height
+BASE_YEAR = 2020
+
+
+class Person(pygame.sprite.Sprite):
+    def __init__(self, name: Optional[str] = None, age: Optional[int] = None,
+                 height: Optional[int] = None, ssid: Optional[SSID] = None) -> None:
+        pygame.sprite.Sprite.__init__(self)
+
+        if name is None:
+            self.name = 'Matti Meikäläinen'  # TODO: Random generation
+        else:
+            self.name = name
+
+        if age is None:
+            self.age = randrange(12, 80)
+        else:
+            self.age = age
+
+        if height is None:
+            self.height = randrange(150, 220)
+        else:
+            self.height = height
+
+        if ssid is None:
+            # SSID generation based on age
+            year = BASE_YEAR - self.age
+            month = randrange(8, 13)
+            day = randrange(1, 30)
+            birthday = date(year, month, day)
+
+            self.ssid = SSID(birthday)
+        else:
+            self.ssid = ssid
+
+        # sprite
+        self.image = pygame.Surface([150, 300])
+        self.image.fill((0, 0, 0))
+
+        self.rect = self.image.get_rect()
+
+    def set_image(self, image: pygame.Surface):
+        self.image = image
+        self.rect = self.image.get_rect()
+
+    def generate_details_surface(self, font: pygame.freetype.Font,
+    color: Optional[tuple] = (0, 0, 0), size: Optional[int] = 42) -> pygame.Surface:
+        name, _ = font.render(f'{self.name}', fgcolor = color, size = size)
+        birthday, _ = font.render(f'Born {self.ssid.birthday}', fgcolor = color, size = size)
+        ssid, _ = font.render(f'{self.ssid}', fgcolor = color, size = size)
+        height, _ = font.render(f'{self.height} cm', fgcolor = color, size = size)
+
+        padding = 10
+        lines = [name, birthday, ssid, height]
+        width = max(map(lambda surf: surf.get_width(), lines))
+        height = sum(map(lambda surf: surf.get_height(), lines)) + len(lines) * padding
+
+        # surface generation
+        surface = pygame.Surface(
+            (
+                width,
+                height
+            ),
+            SRCALPHA
+        )
+
+        current_height = 0
+        for line in lines:
+            surface.blit(
+                line,
+                (
+                    0,
+                    current_height
+                )
+            )
+
+            current_height += line.get_height()
+            current_height += padding
+
+        return surface
+
+    def __repr__(self) -> str:
+        return f'{self.name} {self.ssid}'
