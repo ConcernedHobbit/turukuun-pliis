@@ -118,8 +118,13 @@ class TestSSID(unittest.TestCase):
 
     def test_individual_number_below_2_raises_error(self):
         with self.assertRaises(ValueError):
-            SSID(date(2000, 20, 12), 1)
+            SSID(date(2000, 12, 20), 1)
 
     def test_individual_number_above_899_raises_error(self):
         with self.assertRaises(ValueError):
-            SSID(date(2000, 20, 12), 900)
+            SSID(date(2000, 12, 20), 900)
+
+    def test_ssid_with_no_individual_number_gets_assigned_random_one(self):
+        ssid = SSID(date(2000, 12, 20))
+        self.assertGreaterEqual(ssid.individual_number, 2)
+        self.assertLessEqual(ssid.individual_number, 899)
