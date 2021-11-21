@@ -20,15 +20,21 @@ pygame.display.set_caption('Turukuun Pliis')
 
 # font
 FONT_DIRECTORY = os.path.join('data', 'fonts')
-FONT = pygame.freetype.Font(os.path.join(FONT_DIRECTORY, 'VT323-Regular.ttf'), 42)
+FONT = pygame.freetype.Font(os.path.join(
+    FONT_DIRECTORY, 'VT323-Regular.ttf'), 42)
 
 # images
 IMAGE_DIRECTORY = os.path.join('data', 'sprites')
 PERSON_SPRITE = pygame.image.load(os.path.join(IMAGE_DIRECTORY, 'person.png'))
-PERSON2_SPRITE = pygame.image.load(os.path.join(IMAGE_DIRECTORY, 'person2.png'))
-PERSON3_SPRITE = pygame.image.load(os.path.join(IMAGE_DIRECTORY, 'person3.png'))
+PERSON2_SPRITE = pygame.image.load(
+    os.path.join(IMAGE_DIRECTORY, 'person2.png'))
+PERSON3_SPRITE = pygame.image.load(
+    os.path.join(IMAGE_DIRECTORY, 'person3.png'))
+
+
 def random_sprite() -> pygame.Surface:
     return [PERSON_SPRITE, PERSON2_SPRITE, PERSON3_SPRITE][randrange(3)]
+
 
 # sprites
 visitors = pygame.sprite.Group()
@@ -42,7 +48,34 @@ visitors.add(person)
 
 day = date(2020, 3, 26)
 
+
+def tick() -> None:
+    pygame.display.update()
+    clock.tick(FPS)
+
+
+def splash() -> pygame.Surface:
+    surface = pygame.Surface((WIDTH, HEIGHT))
+    surface.fill((150, 175, 250))
+
+    logo, logo_rect = FONT.render('TURUKUUN PLIIS', size=72)
+    logo_rect.center = (WIDTH / 2, HEIGHT / 2 - 100)
+    surface.blit(
+        logo,
+        logo_rect
+    )
+
+    instructions, instructions_rect = FONT.render(
+        'PRESS ESC / SPACE TO START', size=42)
+    instructions_rect.center = (WIDTH / 2, HEIGHT / 2)
+    surface.blit(instructions, instructions_rect)
+
+    return surface
+
+
 def start():
+    in_menu = True
+
     while True:
         events = pygame.event.get()
         for event in events:
@@ -51,18 +84,32 @@ def start():
                 sys.exit()
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_y or event.key == pygame.K_n:
-                    last_person = visitors.sprites()[0]
-                    last_person.rect.y += 300
-                    visitors.empty()
+                if in_menu:
+                    if event.key in (pygame.K_SPACE, pygame.K_ESCAPE):
+                        in_menu = False
+                        continue
 
-                    new_person = Person()
-                    new_person.set_image(random_sprite())
-                    new_person.rect.x = 420
-                    new_person.rect.y = 200
+                if not in_menu:
+                    if event.key == pygame.K_ESCAPE:
+                        in_menu = True
 
-                    visitors.add(new_person)
-                    visitors.add(last_person)
+                    if event.key in (pygame.K_y, pygame.K_n):
+                        last_person = visitors.sprites()[0]
+                        last_person.rect.y += 300
+                        visitors.empty()
+
+                        new_person = Person()
+                        new_person.set_image(random_sprite())
+                        new_person.rect.x = 420
+                        new_person.rect.y = 200
+
+                        visitors.add(new_person)
+                        visitors.add(last_person)
+
+        if in_menu:
+            WINDOW.blit(splash(), (0, 0))
+            tick()
+            continue
 
         WINDOW.fill((150, 175, 250))
         FONT.render_to(WINDOW, (10, 10), 'Turukuun Pliis', (0, 0, 0))
@@ -72,7 +119,8 @@ def start():
         WINDOW.blit(day_text, day_text_rect)
 
         FONT.render_to(WINDOW, (10, 60), 'Objective:', (0, 0, 0))
-        FONT.render_to(WINDOW, (10, 100), '- Check that details match', (0, 0, 0))
+        FONT.render_to(WINDOW, (10, 100),
+                       '- Check that details match', (0, 0, 0))
 
         WINDOW.blit(
             visitors.sprites()[0].generate_details_surface(FONT),
@@ -82,18 +130,18 @@ def start():
         if len(visitors.sprites()) > 1:
             FONT.render_to(WINDOW, (100, 450), 'Last Person', (50, 50, 50))
             WINDOW.blit(
-                visitors.sprites()[1].generate_details_surface(FONT, color = (125, 125, 125)),
+                visitors.sprites()[1].generate_details_surface(
+                    FONT, color=(125, 125, 125)),
                 (100, 500)
             )
 
         FONT.render_to(WINDOW,
-            (10, WINDOW.get_height() - FONT.size - 10),
-            'Press n to turn away, y to let through',
-            (175, 0, 0)
-        )
+                       (10, WINDOW.get_height() - FONT.size - 10),
+                       'Press n to turn away, y to let through',
+                       (175, 0, 0)
+                       )
 
         visitors.update()
         visitors.draw(WINDOW)
 
-        pygame.display.update()
-        clock.tick(FPS)
+        tick()
