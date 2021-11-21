@@ -13,6 +13,7 @@ clock = pygame.time.Clock()
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Turukuun Pliis')
 
+
 def start():
     while True:
         for event in pygame.event.get():

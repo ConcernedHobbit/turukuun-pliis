@@ -2,6 +2,7 @@ import unittest
 from datetime import date
 from person import SSID
 
+
 class TestSSID(unittest.TestCase):
     def test_1800s(self):
         ids = [

@@ -2,12 +2,14 @@ from datetime import date
 from random import randrange
 from typing import Optional
 
+
 class SSID:
-    def __init__(self, birthday: date, individual_number: Optional[int]=None) -> None:
+    def __init__(self, birthday: date, individual_number: Optional[int] = None) -> None:
         if 1800 <= birthday.year < 2100:
             self.birthday = birthday
         else:
-            raise ValueError('SSID is not defined for years before 1800 or after 2099')
+            raise ValueError(
+                'SSID is not defined for years before 1800 or after 2099')
 
         print(individual_number)
 
@@ -17,7 +19,8 @@ class SSID:
             if 2 <= individual_number < 900:
                 self.individual_number = individual_number
             else:
-                raise ValueError('SSID individual number should be between 2 and 899 (inclusive)')
+                raise ValueError(
+                    'SSID individual number should be between 2 and 899 (inclusive)')
 
     @property
     def _date(self) -> str:
@@ -55,6 +58,7 @@ class SSID:
 
     def __repr__(self) -> str:
         return f'{self._date}{self._seperator}{self._padded_individual_number}{self._checkdigit}'
+
 
 class Person:
     def __init__(self, name: str, age: int, height: int) -> None:
