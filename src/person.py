@@ -108,16 +108,18 @@ class Person(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def generate_details_surface(self, font: pygame.freetype.Font,
-    color: Optional[tuple] = (0, 0, 0), size: Optional[int] = 42) -> pygame.Surface:
-        name, _ = font.render(f'{self.name}', fgcolor = color, size = size)
-        birthday, _ = font.render(f'Born {self.ssid.birthday}', fgcolor = color, size = size)
-        ssid, _ = font.render(f'{self.ssid}', fgcolor = color, size = size)
-        height, _ = font.render(f'{self.height} cm', fgcolor = color, size = size)
+                                 color: Optional[tuple] = (0, 0, 0), size: Optional[int] = 42) -> pygame.Surface:
+        name, _ = font.render(f'{self.name}', fgcolor=color, size=size)
+        birthday, _ = font.render(
+            f'Born {self.ssid.birthday}', fgcolor=color, size=size)
+        ssid, _ = font.render(f'{self.ssid}', fgcolor=color, size=size)
+        height, _ = font.render(f'{self.height} cm', fgcolor=color, size=size)
 
         padding = 10
         lines = [name, birthday, ssid, height]
         width = max(map(lambda surf: surf.get_width(), lines))
-        height = sum(map(lambda surf: surf.get_height(), lines)) + len(lines) * padding
+        height = sum(map(lambda surf: surf.get_height(), lines)) + \
+            len(lines) * padding
 
         # surface generation
         surface = pygame.Surface(
