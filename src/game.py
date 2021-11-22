@@ -65,10 +65,16 @@ def splash() -> pygame.Surface:
         logo_rect
     )
 
-    instructions, instructions_rect = FONT.render(
-        'PRESS ESC / SPACE TO START', size=42)
-    instructions_rect.center = (WIDTH / 2, HEIGHT / 2)
-    surface.blit(instructions, instructions_rect)
+    start_instructions, start_instructions_rect = FONT.render(
+        'PRESS SPACE TO START', size=42)
+    start_instructions_rect.center = (WIDTH / 2, HEIGHT / 2)
+
+    quit_instructions, quit_instructions_rect = FONT.render(
+        'PRESS ESC TO QUIT', size=42)
+    quit_instructions_rect.center = (WIDTH / 2, HEIGHT / 2 + 30)
+
+    surface.blit(start_instructions, start_instructions_rect)
+    surface.blit(quit_instructions, quit_instructions_rect)
 
     return surface
 
@@ -85,9 +91,12 @@ def start():
 
             if event.type == pygame.KEYDOWN:
                 if in_menu:
-                    if event.key in (pygame.K_SPACE, pygame.K_ESCAPE):
+                    if event.key == pygame.K_SPACE:
                         in_menu = False
-                        continue
+
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
 
                 if not in_menu:
                     if event.key == pygame.K_ESCAPE:
