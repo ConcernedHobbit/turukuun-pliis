@@ -2,6 +2,7 @@ from datetime import date
 from random import randrange
 from typing import Optional
 import pygame
+import pygame.freetype
 from pygame.constants import SRCALPHA
 
 
@@ -108,7 +109,8 @@ class Person(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def generate_details_surface(self, font: pygame.freetype.Font,
-                                 color: Optional[tuple] = (0, 0, 0), size: Optional[int] = 42) -> pygame.Surface:
+                                 color: Optional[tuple] = (0, 0, 0),
+                                 size: Optional[int] = 42) -> pygame.Surface:
         name, _ = font.render(f'{self.name}', fgcolor=color, size=size)
         birthday, _ = font.render(
             f'Born {self.ssid.birthday}', fgcolor=color, size=size)
