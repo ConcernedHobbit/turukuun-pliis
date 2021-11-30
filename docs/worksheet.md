@@ -5,4 +5,7 @@
 | 16.11.     |   1   | Requirement specification                |
 | 17.11.     |   2   | Project structure (poetry, initial code) |
 | 21.11.     |   3   | pygame basics, initial working game      |
-| **TOTAL**  |   6   |                                          |
+| 23.11.     |   1   | freetype text, small improvements        |
+| 30.11.     |   1   | architecture documentation, planning     |
+|            |       |                                          |
+| **TOTAL**  |   8   |                                          |
