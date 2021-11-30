@@ -67,6 +67,7 @@ class SSID:
 BASE_YEAR = 2020
 
 
+# TODO: Seperate sprite logic into an encapsulating class to abstract it away from game logic
 class Person(pygame.sprite.Sprite):
     def __init__(self, name: Optional[str] = None, age: Optional[int] = None,
                  height: Optional[int] = None, ssid: Optional[SSID] = None) -> None:

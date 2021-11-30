@@ -5,7 +5,7 @@ import os
 import pygame
 import pygame.freetype
 from pygame.locals import QUIT
-from person import Person
+from logic.person import Person
 
 # constants
 FPS = 60
