@@ -1,4 +1,4 @@
-import ui.game as game
+from ui import game
 
 if __name__ == '__main__':
     print('Hello, world')
