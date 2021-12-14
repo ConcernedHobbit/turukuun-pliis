@@ -1,6 +1,7 @@
 import unittest
 from datetime import date
-from logic.person import Person, SSID
+from logic.person import Person
+from logic.ssid import SSID
 
 
 class TestPerson(unittest.TestCase):
