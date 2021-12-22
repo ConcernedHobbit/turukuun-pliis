@@ -102,5 +102,15 @@ class SSID:
         """
         return self.birthday.year == year
 
+    @staticmethod
+    def random(age: int):
+        year = 2020 - age
+        month = randrange(8, 13)
+        day = randrange(1, 30)
+        birthday = date(year, month, day)
+
+        return SSID(birthday)
+
+
     def __repr__(self) -> str:
         return f'{self._date}{self._seperator}{self._padded_individual_number}{self._checkdigit}'
