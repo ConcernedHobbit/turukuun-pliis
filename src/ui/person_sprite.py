@@ -26,6 +26,7 @@ class PersonSprite(pygame.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect()
 
+    # NOTE: Consider splitting into own class? If person details are constant
     def generate_details_surface(self, font: pygame.freetype.Font,
                                  color: Optional[tuple] = (0, 0, 0),
                                  font_size: Optional[int] = 42) -> pygame.Surface:

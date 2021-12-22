@@ -1,5 +1,5 @@
-from ui import game
+from ui.game import Game
 
 if __name__ == '__main__':
-    print('Hello, world')
-    game.start()
+    game = Game()
+    game.loop()
