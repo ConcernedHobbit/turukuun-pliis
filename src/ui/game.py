@@ -6,6 +6,39 @@ import pygame
 import pygame.freetype
 from pygame.locals import QUIT
 from logic.person import Person
+from ui.person_sprite import PersonSprite
+
+# TODO: Refactor into game class
+class Game:
+    def __init__(self):
+        self.fps = 60
+        width = 800
+        height = 800
+
+        pygame.init()
+        self.clock = pygame.time.Clock()
+
+        self.window = pygame.display.set_mode((width, height))
+        pygame.display.set_caption('Turukuun Pliis')
+
+        self._init_fonts()
+        self._init_images()
+
+    def _init_fonts(self):
+        font_directory = os.path.join('data', 'fonts')
+        self.font = pygame.freetype.Font(os.path.join(
+            font_directory, 'VT323-Regular.ttf'), 42)
+
+    def _init_images(self):
+        image_directory = os.path.join('data', 'sprites')
+        self.person_sprites = []
+
+        # TODO: Dynamic loading?
+        for filename in ('person.png', 'person2.png', 'person3.png'):
+            sprite = pygame.image.load(
+                os.path.join(image_directory, filename)
+            )
+            self.person_sprites.append(sprite)
 
 # constants
 FPS = 60
@@ -39,7 +72,7 @@ def random_sprite() -> pygame.Surface:
 # sprites
 visitors = pygame.sprite.Group()
 
-person = Person()
+person = PersonSprite(Person())
 person.set_image(PERSON_SPRITE)
 person.rect.x = 420
 person.rect.y = 200
@@ -107,7 +140,7 @@ def start():
                         last_person.rect.y += 300
                         visitors.empty()
 
-                        new_person = Person()
+                        new_person = PersonSprite(Person())
                         new_person.set_image(random_sprite())
                         new_person.rect.x = 420
                         new_person.rect.y = 200
