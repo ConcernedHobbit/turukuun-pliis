@@ -6,7 +6,19 @@ from pygame.constants import SRCALPHA
 from logic.person import Person
 
 class PersonSprite(pygame.sprite.Sprite):
-    def __init__(self, person: Person):
+    """Sprite representation of Person.
+
+    Attributes:
+        person (Person): the person this sprite represents.
+        image (pygame.Surface): the image of this person.
+        rect (pgame.Rect): the rectangle covering image.
+    """
+    def __init__(self, person: Person) -> None:
+        """Initializes PersonSprite.
+
+        Args:
+            person (Person): the person this sprite represents.
+        """
         self.person = person
         pygame.sprite.Sprite.__init__(self)
 
@@ -15,10 +27,8 @@ class PersonSprite(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
 
-    def set_image(self, image: pygame.Surface):
-        """
-        (will be refactored)
-        Sets the image for this Person's pygame surface
+    def set_image(self, image: pygame.Surface) -> None:
+        """Sets the image for this Person's pygame surface.
 
         Args:
             image (pygame.Surface): The image to be set
@@ -30,9 +40,7 @@ class PersonSprite(pygame.sprite.Sprite):
     def generate_details_surface(self, font: pygame.freetype.Font,
                                  color: Optional[tuple] = (0, 0, 0),
                                  font_size: Optional[int] = 42) -> pygame.Surface:
-        """
-        (will be refactored)
-        Generates a surface containing the person's details.
+        """Generates a surface containing the person's details.
 
         Args:
             font (pygame.freetype.Font)

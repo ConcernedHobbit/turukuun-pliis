@@ -5,14 +5,17 @@ from typing import Optional
 class SSID:
     """
     A class representing a Finnish personal identity code (henkilötunnus)
-
     More information: https://dvv.fi/en/personal-identity-code
+
+    Attributes:
+        birthday (date): the birthday of this SSID.
+        individual_number (int): the individual number of this SSID.
+            See "More information" link.
     """
     def __init__(self,
                  birthday: date,
                  individual_number: Optional[int] = randrange(2, 900)) -> None:
-        """
-        Constructor for SSID
+        """Initializes SSID.
 
         Args:
             birthday (date): The birthday this SSID will correspond to
@@ -62,7 +65,6 @@ class SSID:
     @property
     def _checkdigit(self) -> str:
         """
-        Returns the checkdigit of this SSID.
         Based on a mod 31 operation on the niner property.
         More information: https://dvv.fi/en/personal-identity-code
         Returns:

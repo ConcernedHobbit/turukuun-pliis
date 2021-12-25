@@ -117,16 +117,20 @@ def random_name():
     return f'{first} {last}'
 
 class Person():
-    """
-    A class representing an in-game person
+    """A class representing an in-game person
+
+    Attributes:
+        name (str): the name of this person.
+        age (int): the age of this person in years.
+        height (int): the height of this person in cm.
+        ssid (SSID): the SSID of this person.
     """
     def __init__(self,
                  name: Optional[str] = None,
                  age: Optional[int] = None,
                  height: Optional[int] = None,
                  ssid: Optional[SSID] = None) -> None:
-        """
-        The constructor for class Person.
+        """Initializes Person.
 
         Args:
             name (str, optional): The name of the person.
@@ -136,7 +140,7 @@ class Person():
             height (int, optional): The height of the person.
                 Defaults to a value between [150, 220[.
             ssid (SSID, optional): The SSID of the person.
-                Randomly generates one based on age if not provided.
+                Defaults to a randomly generated SSID based on age.
         """
         if not name:
             name = random_name()
