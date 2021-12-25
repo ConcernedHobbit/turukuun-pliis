@@ -19,8 +19,7 @@ class Game:
         day (date): the current in-game date.
     """
     def __init__(self) -> None:
-        """Initializes Game.
-        """
+        """Initializes Game."""
         # TODO: Load data from savefile
         self.state = State.DAY
         self.player = Player()

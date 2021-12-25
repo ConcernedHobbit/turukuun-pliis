@@ -5,6 +5,5 @@ class Player:
         points (int): the amount of points the player currently has.
     """
     def __init__(self) -> None:
-        """Initializes Player.
-        """
+        """Initializes Player."""
         self.points = 0

@@ -8,8 +8,7 @@ from ui.person_sprite import PersonSprite
 from logic.game import Game, State
 
 class ScreenHelper:
-    """Static methods for regular operations.
-    """
+    """Static methods for regular operations."""
     @staticmethod
     def centered_text(
         surface: pygame.Surface,
@@ -40,8 +39,7 @@ class ScreenHelper:
         )
 
 class DaySurface:
-    """Methods for generating the Day surface.
-    """
+    """Methods for generating the Day surface."""
     @staticmethod
     def render_last(screen, surface: pygame.Surface, sprite: pygame.sprite.Sprite):
         """Helper method for rendering last processed person on screen.
@@ -105,8 +103,7 @@ class DaySurface:
         return surface
 
 class EndOfDaySurface:
-    """Methods for generating the End of Day surface.
-    """
+    """Methods for generating the End of Day surface."""
     @staticmethod
     def generate(screen) -> pygame.Surface:
         """Generates the End of Day surface.
@@ -131,8 +128,7 @@ class EndOfDaySurface:
         return surface
 
 class MenuSurface:
-    """Methods for generating the Menu surface.
-    """
+    """Methods for generating the Menu surface."""
     @staticmethod
     def generate(screen) -> pygame.Surface:
         """Generates the Menu surface.
@@ -236,8 +232,7 @@ class Screen:
             self.person_sprites.append(sprite)
 
     def tick(self) -> None:
-        """Method for handling ticks happening every frame.
-        """
+        """Method for handling ticks happening every frame."""
         pygame.display.update()
         self.clock.tick(self.fps)
 

@@ -1,3 +1,4 @@
+from __future__ import annotations
 from datetime import date
 from random import randrange
 from typing import Optional
@@ -105,7 +106,17 @@ class SSID:
         return self.birthday.year == year
 
     @staticmethod
-    def random(age: int):
+    def random(age: int) -> SSID:
+        """Create a random SSID based on age.
+        Chooses months and days to avoid running into leap year problems.
+
+        Args:
+            age (int): the age in years.
+                The base year is 2020, so an age of 10 means the person was born in 2010.
+
+        Returns:
+            SSID: the randomly generated SSID.
+        """
         year = 2020 - age
         month = randrange(8, 13)
         day = randrange(1, 30)
