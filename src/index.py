@@ -1,5 +1,7 @@
-from ui.game import Game
+from logic.game import Game
+from ui.screen import Screen
 
 if __name__ == '__main__':
     game = Game()
-    game.loop()
+    screen = Screen(game)
+    screen.loop()
