@@ -55,6 +55,13 @@ class DaySurface:
             (0, 100, 0)
         )
 
+        Helper.centered_text(
+            surface,
+            screen.font,
+            'Press Y to let through, N to deny.',
+            offsets = (0, 150)
+        )
+
         current = screen.game.checkpoint.current_person()
         if current:
             surface.blit(
@@ -91,18 +98,27 @@ class EndOfDaySurface:
         surface = pygame.Surface((screen.width, screen.height))
         surface.fill((20, 200, 250))
 
-        Helper.centered_text(
+        screen.font.render_to(
             surface,
-            screen.font,
-            'END OF DAY',
-            72,
-            (0, -50)
+            (10, 10),
+            f'{screen.game.checkpoint.name} | Day {screen.game.day}',
+            (0, 0, 0),
+            size = 50
         )
 
         Helper.centered_text(
             surface,
             screen.font,
-            f'Points: {screen.game.player.points}'
+            'END OF DAY',
+            94,
+            (0, -200)
+        )
+
+        Helper.centered_text(
+            surface,
+            screen.font,
+            f'Score: {screen.game.player.points}',
+            offsets = (0, -50)
         )
 
         Helper.centered_text(
@@ -110,7 +126,7 @@ class EndOfDaySurface:
             screen.font,
             'PRESS SPACE FOR NEXT DAY',
             50,
-            (0, 30)
+            (0, 70)
         )
 
         surface.blit(
@@ -137,7 +153,7 @@ class MenuSurface:
             pygame.Surface: the Menu surface to draw on screen.
         """
         surface = pygame.Surface((screen.width, screen.height))
-        surface.fill((150, 175, 250))
+        surface.fill((250, 175, 175))
 
         Helper.centered_text(
             surface,
