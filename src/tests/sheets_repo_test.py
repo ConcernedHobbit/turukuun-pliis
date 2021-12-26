@@ -20,6 +20,10 @@ class SheetsRepoTest(unittest.TestCase):
             ['seven', 'eight', 'nine']
         )
 
+    def test_fails_with_invalid_base_url(self):
+        sheets = Sheets('yeehaw')
+        self.assertIsNone(sheets.get_column_as_list('test', 'alpha'))
+
     def is_long(self, names):
         self.assertGreater(
             len(names),
