@@ -33,7 +33,7 @@ We assume that the user is familiar with basic knowledge of how to operate a gen
     - [x] APWTC has a SSID
 
 - [ ] There exists requirements that TWWTC must meet
-    - [ ] Visa requirement, visa document details must match (name, age, SSID, etc.)
+    - [x] Visa requirement, visa document details must match (name, age, SSID, etc.)
     - [ ] Vaccination requirement, vaccination document details must match (name, age, SSID, etc.)
     - [ ] Origin city requirement
     - [ ] Target city requirement
@@ -46,17 +46,17 @@ We assume that the user is familiar with basic knowledge of how to operate a gen
 - [x] The game has a graphical interface (game window, screen)
 - [x] The game displays information regarding TWWTC on the game window
 - [x] APWTC has an image representation
-- [ ] The game presents the user with a windowed splash screen upon startup
+- [x] The game presents the user with a windowed splash screen upon startup
     - [ ] The start-up screen should have a "New Game" option that starts a new game
     - [ ] The start-up screen should have a "Load Game" option that loads an existing game
     - [ ] The start-up screen should have an "Options" option that displays the options menu
 - [ ] The player should receive immediate or end-of-day feedback on their decisions
-- [ ] The game should have an end-of-day briefing (EODB)
+- [x] The game should have an end-of-day briefing (EODB)
     - [ ] The EODB should state day number
     - [ ] The EODB should show statistics (total cases, # crossings, # correct decisions)
 - [ ] The game should be able to be controlled with a mouse
-- [ ] The game can have additional features controlled with a keyboard
-- [ ] The game should be able to be paused (*mouse, keyboard*)
+- [x] The game can have additional features controlled with a keyboard
+- [x] The game should be able to be paused (*mouse, keyboard*)
 
 ---
 ### Further development ideas
