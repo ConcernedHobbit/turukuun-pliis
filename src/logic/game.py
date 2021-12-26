@@ -88,7 +88,7 @@ class Game:
         Should only be called from the end of day report."""
         assert self.state is State.END_OF_DAY, 'Day can only be advanced after End of Day'
 
-        self.day = self.day + timedelta(days = 1)
+        self.day += timedelta(days = 1)
 
         self.checkpoint.populate(
             randrange(
