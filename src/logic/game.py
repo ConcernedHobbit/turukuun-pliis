@@ -26,8 +26,12 @@ class Game:
         checkpoint (Checkpoint): the current checkpoint.
         day (date): the current in-game date.
     """
-    def __init__(self) -> None:
-        """Initializes Game."""
+    def __init__(self, name_service: NameService) -> None:
+        """Initializes Game.
+        
+        Attributes:
+            name_service (NameService): the name service to use to generate names.
+        """
         # TODO: Load data from savefile
         self.state = State.DAY
         self.player = Player()
@@ -40,12 +44,7 @@ class Game:
         self.points_for_correct_rejection = 100
         self.points_for_incorrect_rejection = -200
 
-        self.local_repo = Local()
-        self.sheets_repo = Sheets()
-        self.name_service = NameService(
-            self.local_repo,
-            self.sheets_repo
-        )
+        self.name_service = name_service
         self.person_generator = PersonGenerator(self.name_service)
 
         self.checkpoint = Checkpoint(self)

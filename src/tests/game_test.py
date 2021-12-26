@@ -5,10 +5,20 @@ from logic.game import Game, State
 from logic.person import Person
 from logic.player import Player
 from logic.checkpoint import Checkpoint
+from repository.local import Local
+from repository.sheets import Sheets
+from service.name_service import NameService
 
 class TestGame(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls._name_service = NameService(
+            Local(),
+            Sheets()
+        )
+
     def setUp(self):
-        self.game = Game()
+        self.game = Game(self._name_service)
         self.game.checkpoint.queue.clear()
 
     def test_initialization(self):

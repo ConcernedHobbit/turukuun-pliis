@@ -1,12 +1,21 @@
 import unittest
 from logic.checkpoint import Checkpoint
-from logic.player import Player
+from logic.game import Game
 from logic.person import Person
+from repository.local import Local
+from repository.sheets import Sheets
+from service.name_service import NameService
 
 class TestCheckpoint(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls._name_service = NameService(
+            Local(),
+            Sheets()
+        )
+
     def setUp(self):
-        self.player = Player()
-        self.checkpoint = Checkpoint(self.player)
+        self.checkpoint = Checkpoint(Game(self._name_service))
 
     def only_people_in_queue(self):
         # All people in the queue are instances of Person
@@ -17,7 +26,7 @@ class TestCheckpoint(unittest.TestCase):
         self.assertIsInstance(self.checkpoint.name, str)
         self.assertIsInstance(self.checkpoint.queue, list)
         self.assertIsInstance(self.checkpoint.processed, list)
-        self.assertIsInstance(self.checkpoint.player, Player)
+        self.assertIsInstance(self.checkpoint.game, Game)
 
     def test_populated_at_start(self):
         self.assertGreater(len(self.checkpoint.queue), 0)

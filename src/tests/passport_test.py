@@ -3,6 +3,9 @@ import unittest
 from logic.entry_documents.passport import Passport
 from logic.person import Person, PersonDetails
 from logic.ssid import SSID
+from repository.local import Local
+from repository.sheets import Sheets
+from service.name_service import NameService
 
 class TestEntryDocument(unittest.TestCase):
     def setUp(self):
@@ -67,7 +70,11 @@ class TestEntryDocument(unittest.TestCase):
             )
 
     def test_fake_generation(self):
-        fake_passport = Passport.generate_fake(self.person)
+        name_service = NameService(
+            Local(),
+            Sheets()
+        )
+        fake_passport = Passport.generate_fake(self.person, name_service)
         self.assertEqual(fake_passport.person, self.person)
         self.assertNotEqual(fake_passport.details, self.person.details)
         self.assertFalse(fake_passport.valid)
