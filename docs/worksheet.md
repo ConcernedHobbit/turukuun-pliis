@@ -8,5 +8,7 @@
 | 23.11.     |   1   | freetype text, small improvements        |
 | 30.11.     |   1   | architecture documentation, planning     |
 | 14.12.     |   1   | refactoring, docstring                   |
+| 22.12.     |   2   | general development                      |
+| 26.12.     |   10  | finishing (features, tests, docstring)   |
 |            |       |                                          |
 | **TOTAL**  |   8   |                                          |
