@@ -26,3 +26,13 @@ class TestPerson(unittest.TestCase):
         self.assertLess(person.height, 250)
 
         self.assertIsInstance(person.ssid, SSID)
+
+    def test_string_representation(self):
+        ssid = SSID(date(2000, 12, 20))
+        person = Person('Matti Meikäläinen', 21, 185, ssid)
+
+        ssid_repr = str(ssid)
+        person_repr = str(person)
+
+        self.assertIn('Matti Meikäläinen', person_repr)
+        self.assertIn(ssid_repr, person_repr)
