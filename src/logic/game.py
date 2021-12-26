@@ -7,8 +7,6 @@ from logic.checkpoint import Checkpoint
 from logic.person import Person
 from logic.person_generator import PersonGenerator
 from logic.player import Player
-from repository.local import Local
-from repository.sheets import Sheets
 from service.name_service import NameService
 
 # docstringing enums is complicated[1] and values are self-explanatory.
@@ -28,7 +26,7 @@ class Game:
     """
     def __init__(self, name_service: NameService) -> None:
         """Initializes Game.
-        
+
         Attributes:
             name_service (NameService): the name service to use to generate names.
         """
