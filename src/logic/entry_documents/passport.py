@@ -85,6 +85,8 @@ class Passport(EntryDocument):
             else:
                 # Mutate age
                 difference = randrange(-2, 2)
+                if difference == 0:
+                    difference = -1
                 details.age = person.age + difference
                 details.ssid = SSID(
                     date(
