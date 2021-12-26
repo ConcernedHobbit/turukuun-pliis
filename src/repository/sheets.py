@@ -6,9 +6,6 @@ from requests.exceptions import RequestException
 BASE_URL = 'https://sheetdb.io/api/v1/l92ty9ctz6565'
 
 class Sheets:
-    def __init__(self):
-        self.credentials = None
-
     def get_column_as_list(self, sheet: str, column: str) -> list[str]:
         url = f'{BASE_URL}/?sheet={sheet}'
         try:
