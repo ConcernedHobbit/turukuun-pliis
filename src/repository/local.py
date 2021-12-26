@@ -25,17 +25,6 @@ class Local:
         """
         return os.path.join(self.folder, filename)
 
-    def exists(self, filename: str) -> bool:
-        """Checks if file with filename exists.
-
-        Args:
-            filename (str)
-
-        Returns:
-            bool: whether the file exists.
-        """
-        return os.path.exists(self.get_path(filename))
-
     def save_string_list(self, string_list: list[str], filename: str) -> bool:
         """Saves a list of strings into a file.
         Saves as comma-seperated values (csv)
@@ -71,7 +60,7 @@ class Local:
             list[str]: the list containing values read from the file.
         """
         path = self.get_path(filename)
-        if not self.exists(path):
+        if not os.path.exists(path):
             return None
 
         try:
