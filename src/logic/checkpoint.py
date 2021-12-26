@@ -27,17 +27,19 @@ class Checkpoint:
 
         self.populate()
 
-    def populate(self, amount: int = 10):
+    def populate(self, amount: int = 10, fake_percent: int = 0.3):
         """Populate the checkpoint's queue with people.
 
         Args:
             amount (int, optional): amount of people to populate with.
                 Defaults to 10.
+            fake_percent (int, optional): amount of people with fake passports.
+                Defauls to 0.3 (30%)
         """
         for _ in range(amount):
             # TODO: Move person generation into seperate class/method?
             person = Person()
-            if random() < 0.7:
+            if random() < (1 - fake_percent):
                 passport = Passport(person)
             else:
                 passport = Passport.generate_fake(person)

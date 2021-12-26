@@ -1,8 +1,8 @@
 import pygame
 
 import pygame.freetype
-from pygame.constants import SRCALPHA
 from logic.entry_documents.passport import Passport
+from ui.helper import Helper
 
 class PassportSprite(pygame.sprite.Sprite):
     """Sprite representation of Passport."""
@@ -42,7 +42,6 @@ class PassportSprite(pygame.sprite.Sprite):
             size = 50
         )
 
-        padding = 10
         lines = [
             title,
             self._generate_title('LAST NAME'),
@@ -52,33 +51,5 @@ class PassportSprite(pygame.sprite.Sprite):
             self._generate_title('SSID'),
             self._generate_detail(self.passport.details.ssid)
         ]
-        width = max(map(lambda surf: surf.get_width(), lines))
-        height = sum(map(lambda surf: surf.get_height(), lines)) + \
-            len(lines) * padding
 
-        background = pygame.Surface((width, height))
-        background.fill((120, 110, 80))
-
-        surface = pygame.Surface(
-            (
-                width,
-                height
-            ),
-            SRCALPHA
-        )
-
-        current_height = 0
-        for line in lines:
-            surface.blit(
-                line,
-                (
-                    0,
-                    current_height
-                )
-            )
-
-            current_height += line.get_height()
-            current_height += padding
-
-        background.blit(surface, (0, 0))
-        return surface
+        return Helper.combined_surface(lines, 10)

@@ -1,48 +1,19 @@
+from __future__ import annotations
 from random import choice
 import sys
 import os
 import pygame
 import pygame.freetype
 from pygame.locals import QUIT
+from ui.helper import Helper
 from ui.passport_sprite import PassportSprite
 from ui.person_sprite import PersonSprite
 from logic.game import Game, State
 
-class ScreenHelper:
-    """Static methods for regular operations."""
-    @staticmethod
-    def centered_text(
-        surface: pygame.Surface,
-        font: pygame.freetype.Font,
-        text: str,
-        size: int = 42,
-        offsets: tuple = (0, 0)
-    ) -> None:
-        """Blits centered text on pygame surface
-
-        Args:
-            surface (pygame.Surface): the surface to blit onto
-            font (pygame.freetype.Font): the font to render with
-            text (str): the text to render
-            size (int, optional): font size.
-                Defaults to 42.
-            offsets (tuple, optional): offsets in format(horizontal, vertical).
-                Defaults to (0, 0).
-        """
-        text, rect = font.render(text, size=size)
-        rect.center = (
-            surface.get_width() / 2 + offsets[0],
-            surface.get_height() / 2 + offsets[1]
-        )
-        surface.blit(
-            text,
-            rect
-        )
-
 class DaySurface:
     """Methods for generating the Day surface."""
     @staticmethod
-    def render_last(screen, surface: pygame.Surface, sprite: pygame.sprite.Sprite):
+    def render_last(screen: Screen, surface: pygame.Surface, sprite: pygame.sprite.Sprite):
         """Helper method for rendering last processed person on screen.
 
         Args:
@@ -58,7 +29,7 @@ class DaySurface:
         )
 
     @staticmethod
-    def generate(screen) -> pygame.Surface:
+    def generate(screen: Screen) -> pygame.Surface:
         """Generates the Day surface.
 
         Args:
@@ -73,8 +44,9 @@ class DaySurface:
         screen.font.render_to(
             surface,
             (10, 10),
-            f'Checkpoint {screen.game.checkpoint.name}',
-            (0, 0, 0)
+            f'Checkpoint {screen.game.checkpoint.name} | Day {screen.game.day}',
+            (0, 0, 0),
+            size = 50
         )
 
         screen.font.render_to(
@@ -88,6 +60,13 @@ class DaySurface:
             (10, 100),
             '- Check that details match',
             (0, 0, 0)
+        )
+
+        screen.font.render_to(
+            surface,
+            (10, 140),
+            f'In Queue: {len(screen.game.checkpoint.queue)}',
+            (0, 100, 0)
         )
 
         current = screen.game.checkpoint.current_person()
@@ -114,7 +93,7 @@ class DaySurface:
 class EndOfDaySurface:
     """Methods for generating the End of Day surface."""
     @staticmethod
-    def generate(screen) -> pygame.Surface:
+    def generate(screen: Screen) -> pygame.Surface:
         """Generates the End of Day surface.
 
         Args:
@@ -126,7 +105,7 @@ class EndOfDaySurface:
         surface = pygame.Surface((screen.width, screen.height))
         surface.fill((20, 200, 250))
 
-        ScreenHelper.centered_text(
+        Helper.centered_text(
             surface,
             screen.font,
             'END OF DAY',
@@ -134,10 +113,27 @@ class EndOfDaySurface:
             (0, -50)
         )
 
-        ScreenHelper.centered_text(
+        Helper.centered_text(
             surface,
             screen.font,
             f'Points: {screen.game.player.points}'
+        )
+
+        Helper.centered_text(
+            surface,
+            screen.font,
+            'PRESS SPACE FOR NEXT DAY',
+            50,
+            (0, 30)
+        )
+
+        surface.blit(
+            Helper.multiline_text(
+                screen.font,
+                Helper.point_explanation(screen.game),
+                30
+            ),
+            (100, 500)
         )
 
         return surface
@@ -145,7 +141,7 @@ class EndOfDaySurface:
 class MenuSurface:
     """Methods for generating the Menu surface."""
     @staticmethod
-    def generate(screen) -> pygame.Surface:
+    def generate(screen: Screen) -> pygame.Surface:
         """Generates the Menu surface.
 
         Args:
@@ -157,25 +153,35 @@ class MenuSurface:
         surface = pygame.Surface((screen.width, screen.height))
         surface.fill((150, 175, 250))
 
-        ScreenHelper.centered_text(
+        Helper.centered_text(
             surface,
             screen.font,
             'TURUKUUN PLIIS',
-            72,
-            (0, -100)
+            120,
+            (0, -200)
         )
 
-        ScreenHelper.centered_text(
+        Helper.centered_text(
             surface,
             screen.font,
-            'PRESS SPACE TO START'
+            'PRESS SPACE TO START',
+            offsets = (0, -100)
         )
 
-        ScreenHelper.centered_text(
+        Helper.centered_text(
             surface,
             screen.font,
-            'PRESS ESC TO QUIT',
-            offsets = (0, 30)
+            'PRESS Q TO QUIT',
+            offsets = (0, -70)
+        )
+
+        surface.blit(
+            Helper.multiline_text(
+                screen.font,
+                Helper.point_explanation(screen.game),
+                30
+            ),
+            (100, 500)
         )
 
         return surface
@@ -185,6 +191,7 @@ class Screen:
     Call loop to start the main game loop and display the game.
 
     Attributes:
+        game (Game): the game instance.
         fps (int): frames per second to display.
         width (int): width of the screen.
         height (int): height of the screen.
@@ -205,8 +212,8 @@ class Screen:
         self.game = game
 
         self.fps = 60
-        self.width = 1920
-        self.height = 1080
+        self.height = 720
+        self.width = 1080
 
         self.custom_events = {
             'NEXT_DAY': pygame.USEREVENT + 1,
@@ -269,7 +276,7 @@ class Screen:
 
         To be depreceated.
         """
-        next_person = self.game.checkpoint.next_person()
+        next_person = self.game.current_person()
 
         last_sprite = self.persons.sprites()[0]
         self.persons.empty()
@@ -295,20 +302,38 @@ class Screen:
 
             if event.type == pygame.KEYDOWN:
                 if self.in_menu:
-                    if event.key == pygame.K_SPACE:
+                    if event.key in (pygame.K_SPACE, pygame.K_ESCAPE):
                         self.in_menu = False
 
-                    if event.key == pygame.K_ESCAPE:
+                    if event.key == pygame.K_q:
                         pygame.quit()
                         sys.exit()
 
-                else:
+                elif self.game.state == State.END_OF_DAY:
                     if event.key == pygame.K_ESCAPE:
                         self.in_menu = True
 
-                    if event.key in (pygame.K_y, pygame.K_n):
+                    if event.key == pygame.K_SPACE:
+                        self.game.next_day()
+
+                elif self.game.state == State.DAY:
+                    if event.key == pygame.K_ESCAPE:
+                        self.in_menu = True
+
+                    if event.key == pygame.K_y:
+                        self.game.approve_person()
                         self.next_person()
                         self.game.tick()
+
+                    if event.key == pygame.K_n:
+                        self.game.reject_person()
+                        self.next_person()
+                        self.game.tick()
+
+                else:
+                    # In an incorrect state, any key press will quit.
+                    pygame.quit()
+                    sys.exit()
 
     def loop(self):
         """Main loop, call to start the screen."""
