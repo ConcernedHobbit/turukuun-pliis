@@ -2,7 +2,6 @@ from random import random
 from typing import Optional
 from logic.entry_documents.passport import Passport
 from logic.person import Person
-from logic.player import Player
 
 class Checkpoint:
     """Class for representing a sigle crossing checkpoint.
@@ -13,21 +12,23 @@ class Checkpoint:
         processed (list): list containing Persons that have been processed.
         player (Player): the player assigned to this checkpoint.
     """
-    def __init__(self, player: Player) -> None:
+    def __init__(self, game) -> None:
         """Initializes Checkpoint.
 
         Args:
-            player (Player): the player assigned to this checkpoint.
+            game (Game): the game this checkpoint is in.
         """
         self.name = 'Uusimaa Border Crossing'
         self.queue = []
         self.processed = []
 
-        self.player = player
+        self.game = game
 
         self.populate()
 
-    def populate(self, amount: int = 10, fake_percent: int = 0.3):
+    def populate(self,
+                 amount: int = 10,
+                 fake_percent: int = 0.3):
         """Populate the checkpoint's queue with people.
 
         Args:
@@ -37,12 +38,11 @@ class Checkpoint:
                 Defauls to 0.3 (30%)
         """
         for _ in range(amount):
-            # TODO: Move person generation into seperate class/method?
-            person = Person()
+            person = self.game.person_generator.get_person()
             if random() < (1 - fake_percent):
                 passport = Passport(person)
             else:
-                passport = Passport.generate_fake(person)
+                passport = Passport.generate_fake(person, self.game.name_service)
             person.entry_documents.append(passport)
             self.queue.append(person)
 

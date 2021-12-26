@@ -5,7 +5,11 @@ from random import randrange
 from typing import Optional
 from logic.checkpoint import Checkpoint
 from logic.person import Person
+from logic.person_generator import PersonGenerator
 from logic.player import Player
+from repository.local import Local
+from repository.sheets import Sheets
+from service.name_service import NameService
 
 # docstringing enums is complicated[1] and values are self-explanatory.
 # [1] https://stackoverflow.com/a/50475245
@@ -27,7 +31,6 @@ class Game:
         # TODO: Load data from savefile
         self.state = State.DAY
         self.player = Player()
-        self.checkpoint = Checkpoint(self.player)
 
         self.start_date = date(2020, 3, 20)
         self.day = self.start_date
@@ -36,6 +39,16 @@ class Game:
         self.points_for_incorrect_approval = -100
         self.points_for_correct_rejection = 100
         self.points_for_incorrect_rejection = -200
+
+        self.local_repo = Local()
+        self.sheets_repo = Sheets()
+        self.name_service = NameService(
+            self.local_repo,
+            self.sheets_repo
+        )
+        self.person_generator = PersonGenerator(self.name_service)
+
+        self.checkpoint = Checkpoint(self)
 
     def tick(self) -> None:
         """Advance game logic.

@@ -4,6 +4,7 @@ from random import random, randrange
 from logic.entry_documents.entry_document import EntryDocument
 from logic.person import Person, PersonDetails
 from logic.ssid import SSID
+from service.name_service import NameService
 
 class Passport(EntryDocument):
     """An EntryDocument representing the basic details of a Person.
@@ -51,7 +52,7 @@ class Passport(EntryDocument):
                     self.reason_not_valid += f'\n{reason}'
 
     @staticmethod
-    def generate_fake(person: Person, difficulty: int = 0) -> Passport:
+    def generate_fake(person: Person, name_service: NameService, difficulty: int = 0) -> Passport:
         """Generates a fake Passport.
 
         Args:
@@ -66,20 +67,20 @@ class Passport(EntryDocument):
         if difficulty == 0:
             if random() < 0.5:
                 # Mutate name
-                first, last = person.name.split()
+                first, last, *_ = person.name.split()
                 if random() < 0.75:
                     # Mutate last name completely
                     # TODO: Make this not dirty, e.g. seperate random_last_name method somewhere
                     new_last = last
                     while new_last == last:
-                        new_last = Person().name.split()[1]
+                        new_last = name_service.random_surname()
                     last = new_last
                 else:
                     # Mutate first name completely
                     # TODO: Make this not dirty, e.g. seperate random_first_name method somewhere
                     new_first = first
                     while new_first == first:
-                        new_first = Person().name.split()[0]
+                        new_first = name_service.random_first_name()
                     first = new_first
                 details.name = f'{first} {last}'
             else:

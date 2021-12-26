@@ -13,22 +13,6 @@ from logic.game import Game, State
 class DaySurface:
     """Methods for generating the Day surface."""
     @staticmethod
-    def render_last(screen: Screen, surface: pygame.Surface, sprite: pygame.sprite.Sprite):
-        """Helper method for rendering last processed person on screen.
-
-        Args:
-            screen (Screen): the screen in use.
-            surface (pygame.Surface): the surface to blit on.
-            sprite (pygame.sprite.Sprite): the sprite of the last person.
-        """
-        screen.font.render_to(surface, (100, 450), 'Last Person', (50, 50, 50))
-        surface.blit(
-            sprite.generate_details_surface(
-                screen.font, color=(125, 125, 125)),
-            (100, 500)
-        )
-
-    @staticmethod
     def generate(screen: Screen) -> pygame.Surface:
         """Generates the Day surface.
 
@@ -44,7 +28,7 @@ class DaySurface:
         screen.font.render_to(
             surface,
             (10, 10),
-            f'Checkpoint {screen.game.checkpoint.name} | Day {screen.game.day}',
+            f'{screen.game.checkpoint.name} | Day {screen.game.day}',
             (0, 0, 0),
             size = 50
         )
@@ -72,8 +56,12 @@ class DaySurface:
         current = screen.game.checkpoint.current_person()
         if current:
             surface.blit(
-                screen.persons.sprites()[0].generate_details_surface(screen.font),
+                current.sprite.generate_details_surface(screen.font),
                 (100, 200)
+            )
+            surface.blit(
+                current.sprite.image,
+                (470, 250)
             )
             if current.has_entry_document('Passport'):
                 surface.blit(
@@ -84,10 +72,6 @@ class DaySurface:
                     (600, 200)
             )
 
-        if len(screen.persons.sprites()) > 1:
-            DaySurface.render_last(screen, surface, screen.persons.sprites()[1])
-
-        screen.persons.draw(surface)
         return surface
 
 class EndOfDaySurface:
@@ -218,7 +202,7 @@ class Screen:
         self.custom_events = {
             'NEXT_DAY': pygame.USEREVENT + 1,
             'REJECT_PERSON': pygame.USEREVENT + 2,
-            'ACCEPT_PERSON': pygame.USEREVENT + 3
+            'APPROVE_PERSON': pygame.USEREVENT + 3
         }
 
         pygame.init()
@@ -230,15 +214,7 @@ class Screen:
 
         self._init_fonts()
         self._init_images()
-
-        # self.checkpoint = Checkpoint()
-        self.persons = pygame.sprite.Group()
-
-        first_sprite = PersonSprite(self.game.checkpoint.current_person())
-        first_sprite.set_image(self.random_sprite())
-        first_sprite.rect.x = 420
-        first_sprite.rect.y = 200
-        self.persons.add(first_sprite)
+        self.apply_sprites()
 
     def _init_fonts(self) -> None:
         """Initialize fonts."""
@@ -271,26 +247,10 @@ class Screen:
         """
         return choice(self.person_sprites)
 
-    def next_person(self) -> None:
-        """Move on to the next person in queue.
-
-        To be depreceated.
-        """
-        next_person = self.game.current_person()
-
-        last_sprite = self.persons.sprites()[0]
-        self.persons.empty()
-
-        if next_person:
-            last_sprite.rect.y += 300
-
-            next_sprite = PersonSprite(next_person)
-            next_sprite.set_image(self.random_sprite())
-            next_sprite.rect.x = 420
-            next_sprite.rect.y = 200
-
-            self.persons.add(next_sprite)
-        self.persons.add(last_sprite)
+    def apply_sprites(self) -> None:
+        for person in self.game.checkpoint.queue:
+            person.sprite = PersonSprite(person)
+            person.sprite.set_image(self.random_sprite())
 
     def _handle_events(self):
         """Handle pygame events."""
@@ -315,6 +275,7 @@ class Screen:
 
                     if event.key == pygame.K_SPACE:
                         self.game.next_day()
+                        self.apply_sprites()
 
                 elif self.game.state == State.DAY:
                     if event.key == pygame.K_ESCAPE:
@@ -322,18 +283,29 @@ class Screen:
 
                     if event.key == pygame.K_y:
                         self.game.approve_person()
-                        self.next_person()
                         self.game.tick()
 
                     if event.key == pygame.K_n:
                         self.game.reject_person()
-                        self.next_person()
                         self.game.tick()
 
                 else:
                     # In an incorrect state, any key press will quit.
                     pygame.quit()
                     sys.exit()
+
+            if event.type == self.custom_events['NEXT_DAY']:
+                if self.game.state == State.END_OF_DAY:
+                    self.game.next_day()
+                    self.apply_sprites()
+
+            if event.type == self.custom_events['REJECT_PERSON']:
+                if self.game.state == State.DAY:
+                    self.game.reject_person()
+
+            if event.type == self.custom_events['APPROVE_PERSON']:
+                if self.game.state == State.DAY:
+                    self.game.approve_person()
 
     def loop(self):
         """Main loop, call to start the screen."""
