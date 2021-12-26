@@ -2,17 +2,20 @@ import unittest
 from datetime import date
 from logic.person import Person
 from logic.ssid import SSID
+from logic.entry_documents.entry_document import EntryDocument
 
 
 class TestPerson(unittest.TestCase):
     def test_person_can_be_created(self):
         ssid = SSID(date(2000, 12, 20))
-        person = Person('Matti Meikäläinen', 21, 185, ssid)
+        entry_documents = [EntryDocument('Test')]
+        person = Person('Matti Meikäläinen', 21, 185, ssid, entry_documents)
 
         self.assertEqual(person.name, 'Matti Meikäläinen')
         self.assertEqual(person.age, 21)
         self.assertEqual(person.height, 185)
-        self.assertEqual(ssid, person.ssid)
+        self.assertEqual(person.ssid, ssid)
+        self.assertEqual(person.entry_documents, entry_documents)
 
     def test_person_can_be_randomized(self):
         person = Person()
@@ -26,6 +29,8 @@ class TestPerson(unittest.TestCase):
         self.assertLess(person.height, 250)
 
         self.assertIsInstance(person.ssid, SSID)
+
+        self.assertEqual(len(person.entry_documents), 0)
 
     def test_string_representation(self):
         ssid = SSID(date(2000, 12, 20))

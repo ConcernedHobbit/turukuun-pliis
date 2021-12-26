@@ -4,6 +4,7 @@ import os
 import pygame
 import pygame.freetype
 from pygame.locals import QUIT
+from ui.passport_sprite import PassportSprite
 from ui.person_sprite import PersonSprite
 from logic.game import Game, State
 
@@ -14,7 +15,7 @@ class ScreenHelper:
         surface: pygame.Surface,
         font: pygame.freetype.Font,
         text: str,
-        size: int = 72,
+        size: int = 42,
         offsets: tuple = (0, 0)
     ) -> None:
         """Blits centered text on pygame surface
@@ -24,7 +25,7 @@ class ScreenHelper:
             font (pygame.freetype.Font): the font to render with
             text (str): the text to render
             size (int, optional): font size.
-                Defaults to 72.
+                Defaults to 42.
             offsets (tuple, optional): offsets in format(horizontal, vertical).
                 Defaults to (0, 0).
         """
@@ -95,6 +96,14 @@ class DaySurface:
                 screen.persons.sprites()[0].generate_details_surface(screen.font),
                 (100, 200)
             )
+            if current.has_entry_document('Passport'):
+                surface.blit(
+                    PassportSprite(
+                        current.get_entry_document('Passport'),
+                        screen.font
+                    ).image,
+                    (600, 200)
+            )
 
         if len(screen.persons.sprites()) > 1:
             DaySurface.render_last(screen, surface, screen.persons.sprites()[1])
@@ -125,6 +134,12 @@ class EndOfDaySurface:
             (0, -50)
         )
 
+        ScreenHelper.centered_text(
+            surface,
+            screen.font,
+            f'Points: {screen.game.player.points}'
+        )
+
         return surface
 
 class MenuSurface:
@@ -153,16 +168,14 @@ class MenuSurface:
         ScreenHelper.centered_text(
             surface,
             screen.font,
-            'PRESS SPACE TO START',
-            42
+            'PRESS SPACE TO START'
         )
 
         ScreenHelper.centered_text(
             surface,
             screen.font,
             'PRESS ESC TO QUIT',
-            42,
-            (0, 30)
+            offsets = (0, 30)
         )
 
         return surface
@@ -194,6 +207,12 @@ class Screen:
         self.fps = 60
         self.width = 1920
         self.height = 1080
+
+        self.custom_events = {
+            'NEXT_DAY': pygame.USEREVENT + 1,
+            'REJECT_PERSON': pygame.USEREVENT + 2,
+            'ACCEPT_PERSON': pygame.USEREVENT + 3
+        }
 
         pygame.init()
         self.clock = pygame.time.Clock()
@@ -283,7 +302,7 @@ class Screen:
                         pygame.quit()
                         sys.exit()
 
-                if not self.in_menu:
+                else:
                     if event.key == pygame.K_ESCAPE:
                         self.in_menu = True
 

@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from logic.checkpoint import Checkpoint
 from logic.player import Player
 
-# docstrining enums is complicated[1] and values are self-explanatory.
+# docstringing enums is complicated[1] and values are self-explanatory.
 # [1] https://stackoverflow.com/a/50475245
 class State(Enum):
     DAY = auto()

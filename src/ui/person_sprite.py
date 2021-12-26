@@ -19,8 +19,8 @@ class PersonSprite(pygame.sprite.Sprite):
         Args:
             person (Person): the person this sprite represents.
         """
-        self.person = person
         pygame.sprite.Sprite.__init__(self)
+        self.person = person
 
         self.image = pygame.Surface([150, 300])
         self.image.fill((0, 0, 0))

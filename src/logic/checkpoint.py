@@ -1,4 +1,6 @@
+from random import random
 from typing import Optional
+from logic.entry_documents.passport import Passport
 from logic.person import Person
 from logic.player import Player
 
@@ -33,7 +35,14 @@ class Checkpoint:
                 Defaults to 10.
         """
         for _ in range(amount):
-            self.queue.append(Person())
+            # TODO: Move person generation into seperate class/method?
+            person = Person()
+            if random() < 0.7:
+                passport = Passport(person)
+            else:
+                passport = Passport.generate_fake(person)
+            person.entry_documents.append(passport)
+            self.queue.append(person)
 
     def current_person(self) -> Optional[Person]:
         """Get current person in queue.

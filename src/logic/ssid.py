@@ -124,6 +124,11 @@ class SSID:
 
         return SSID(birthday)
 
+    def __eq__(self, other):
+        if not isinstance(other, SSID):
+            return False
+
+        return str(self) == str(other)
 
     def __repr__(self) -> str:
         return f'{self._date}{self._seperator}{self._padded_individual_number}{self._checkdigit}'
