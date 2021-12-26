@@ -138,3 +138,21 @@ class TestSSID(unittest.TestCase):
         ssid = SSID(date(2000, 12, 20))
         self.assertFalse(ssid.matches_birthyear(1999))
         self.assertFalse(ssid.matches_birthyear(2001))
+
+    def test_equals_when_same(self):
+        ssid = SSID(date(2000, 12, 20), 100)
+        other_ssid = SSID(date(2000, 12, 20), 100)
+        self.assertEqual(ssid, other_ssid)
+
+    def test_not_equals_when_different(self):
+        ssid = SSID(date(2000, 12, 20), 101)
+        other_ssid = SSID(date(2000, 12, 20), 100)
+        self.assertNotEqual(ssid, other_ssid)
+
+        ssid = SSID(date(2000, 12, 20), 100)
+        other_ssid = SSID(date(2000, 12, 21), 100)
+        self.assertNotEqual(ssid, other_ssid)
+
+    def test_not_equals_when_not_instance(self):
+        ssid = SSID(date(2000, 12, 20), 101)
+        self.assertNotEqual(ssid, '201200A101U')
