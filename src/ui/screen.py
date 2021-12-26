@@ -2,9 +2,11 @@ from __future__ import annotations
 from random import choice
 import sys
 import os
+
 import pygame
 import pygame.freetype
 from pygame.locals import QUIT
+
 from ui.helper import Helper
 from ui.passport_sprite import PassportSprite
 from ui.person_sprite import PersonSprite
@@ -248,6 +250,7 @@ class Screen:
         return choice(self.person_sprites)
 
     def apply_sprites(self) -> None:
+        """Apply a PersonSprite to every person in queue."""
         for person in self.game.checkpoint.queue:
             person.sprite = PersonSprite(person)
             person.sprite.set_image(self.random_sprite())
