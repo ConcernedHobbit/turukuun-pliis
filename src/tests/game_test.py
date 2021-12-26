@@ -1,7 +1,6 @@
 from datetime import date, timedelta
 import unittest
 from logic.entry_documents.entry_document import EntryDocument
-from logic.entry_documents.passport import Passport
 from logic.game import Game, State
 from logic.person import Person
 from logic.player import Player
@@ -37,6 +36,18 @@ class TestGame(unittest.TestCase):
         self.assertGreater(len(self.game.checkpoint.queue), 0)
         self.assertEqual(self.game.day, current_day + timedelta(days = 1))
 
+    def test_approve_when_queue_empty(self):
+        self.game.approve_person()
+        self.assertEqual(self.game.player.points, 0)
+        self.assertEqual(len(self.game.checkpoint.queue), 0)
+        self.assertEqual(len(self.game.checkpoint.processed), 0)
+
+    def test_reject_when_queue_empty(self):
+        self.game.reject_person()
+        self.assertEqual(self.game.player.points, 0)
+        self.assertEqual(len(self.game.checkpoint.queue), 0)
+        self.assertEqual(len(self.game.checkpoint.processed), 0)
+
     def test_approve_when_correct_decision(self):
         self.game.checkpoint.queue.append(Person())
         self.game.approve_person()
@@ -68,3 +79,12 @@ class TestGame(unittest.TestCase):
         self.assertGreater(self.game.player.points, 0)
         self.assertEqual(len(self.game.checkpoint.queue), 0)
         self.assertEqual(len(self.game.checkpoint.processed), 1)
+
+    def test_days_passed(self):
+        self.game.day += timedelta(days = 10)
+        self.assertEqual(self.game.days_passed, 10)
+
+    def test_current_person(self):
+        self.assertIsNone(self.game.current_person())
+        self.game.checkpoint.queue.append(Person())
+        self.assertIsInstance(self.game.current_person(), Person)
