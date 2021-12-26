@@ -50,10 +50,10 @@ class Game:
         if not person:
             return
 
-        if any(not document.valid for document in person.entry_documents):
-            self.player.points -= self.points_for_incorrect_approval
-        else:
+        if all(document.valid for document in person.entry_documents):
             self.player.points += self.points_for_correct_approval
+        else:
+            self.player.points += self.points_for_incorrect_approval
 
         self.checkpoint.next_person()
 
@@ -64,10 +64,10 @@ class Game:
         if not person:
             return
 
-        if any(not document.valid for document in person.entry_documents):
-            self.player.points += self.points_for_correct_rejection
-        else:
+        if all(document.valid for document in person.entry_documents):
             self.player.points += self.points_for_incorrect_rejection
+        else:
+            self.player.points += self.points_for_correct_rejection
 
         self.checkpoint.next_person()
 
