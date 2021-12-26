@@ -41,3 +41,19 @@ class TestPerson(unittest.TestCase):
 
         self.assertIn('Matti Meikäläinen', person_repr)
         self.assertIn(ssid_repr, person_repr)
+
+    def test_get_entry_document(self):
+        person = Person()
+        self.assertIsNone(person.get_entry_document('Test'))
+
+        entry_document = EntryDocument('Test')
+        person.entry_documents.append(entry_document)
+        self.assertEqual(person.get_entry_document('Test'), entry_document)
+
+    def test_has_entry_document(self):
+        person = Person()
+        self.assertFalse(person.has_entry_document('Test'))
+
+        entry_document = EntryDocument('Test')
+        person.entry_documents.append(entry_document)
+        self.assertTrue(person.has_entry_document('Test'))
