@@ -47,6 +47,8 @@ class Game:
         """Approve the current person to pass.
         Will process the current person, so they are removed from the queue."""
         person = self.checkpoint.current_person()
+        if not person:
+            return
 
         if any(not document.valid for document in person.entry_documents):
             self.player.points -= self.points_for_incorrect_approval
@@ -59,6 +61,8 @@ class Game:
         """Reject the current person from passing.
         Will process the current person, so they are removed from the queue."""
         person = self.checkpoint.current_person()
+        if not person:
+            return
 
         if any(not document.valid for document in person.entry_documents):
             self.player.points += self.points_for_correct_rejection
