@@ -200,6 +200,7 @@ class Screen:
 
         self.window = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption('Turukuun Pliis')
+        self.in_menu = True
 
         self._init_fonts()
         self._init_images()
@@ -274,17 +275,17 @@ class Screen:
                 sys.exit()
 
             if event.type == pygame.KEYDOWN:
-                if in_menu:
+                if self.in_menu:
                     if event.key == pygame.K_SPACE:
-                        in_menu = False
+                        self.in_menu = False
 
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         sys.exit()
 
-                if not in_menu:
+                if not self.in_menu:
                     if event.key == pygame.K_ESCAPE:
-                        in_menu = True
+                        self.in_menu = True
 
                     if event.key in (pygame.K_y, pygame.K_n):
                         self.next_person()
@@ -292,12 +293,10 @@ class Screen:
 
     def loop(self):
         """Main loop, call to start the screen."""
-        in_menu = True
-
         while True:
             self._handle_events()
 
-            if in_menu:
+            if self.in_menu:
                 self.window.blit(MenuSurface.generate(self), (0, 0))
             elif self.game.state is State.DAY:
                 self.window.blit(DaySurface.generate(self), (0, 0))
